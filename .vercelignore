@@ -1,0 +1,17 @@
+# Git & GitHub
+.git
+.github
+
+# Dependencies
+node_modules
+
+# Build output & tests
+dist
+test
+src/test
+**/*.test.ts
+**/*.test.tsx
+
+# Documentation & temporary files
+*.md
+/tmp/

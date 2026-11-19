@@ -8,6 +8,27 @@ A browser-based Theory of Computation project built with React, TypeScript and R
 
 Both games can open the played string and its rule in the compiler.
 
+## Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FGitHShah%2FStateVerse)
+
+### Option 1: Vercel Dashboard (Zero Config)
+1. Go to [Vercel](https://vercel.com) and click **"Add New Project"**.
+2. Import the **`GitHShah/StateVerse`** repository.
+3. Vercel automatically detects the Vite framework and applies the settings from `vercel.json`:
+   - **Framework Preset:** Vite
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+4. Click **Deploy**.
+
+### Option 2: Vercel CLI
+```bash
+npm install -g vercel
+vercel
+# Follow prompts, then deploy to production:
+vercel --prod
+```
+
 ## Run locally
 
 ```powershell
