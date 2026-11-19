@@ -1,12 +1,11 @@
 /**
  * StateVerse - Thompson's Construction Algorithm
- * Compiles an AST (or multiple rule ASTs) into an ε-NFA.
- * Supports: literals, character classes [a-z], [^abc], wildcard '.', escapes, and multi-pattern union.
+ * Compiles an AST into an ε-NFA.
+ * Supports: literals, character classes [a-z], [^abc], wildcard '.', and escapes.
  * All transitions use serializable SymbolMatcherDef plain data objects.
  */
 
-import { ASTNode, NFA, NFAState, NFATransition, EPSILON, Rule, SymbolMatcherDef } from './types';
-import { parseRegexToAST } from './parser';
+import { ASTNode, NFA, NFAState, NFATransition, EPSILON, SymbolMatcherDef } from './types';
 
 interface NFAFragment {
   start: string;
@@ -221,101 +220,6 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
     transitions: normalizedTransitions,
     startState: idMap.get(rootFrag.start)!,
     acceptStates: [idMap.get(rootFrag.accept)!],
-    alphabet: Array.from(alphabetSet).sort(),
-    stateRuleMap,
-  };
-}
-
-/**
- * Builds a Multi-Pattern ε-NFA combining multiple rules into a unified automaton.
- * The root start state connects via ε-transitions to each rule's sub-NFA start state.
- * Accepting states retain their respective ruleId and priority.
- */
-export function buildMultiRuleNFA(rules: Rule[]): NFA {
-  const enabledRules = rules.filter((r) => r.enabled);
-  if (enabledRules.length === 0) {
-    return {
-      type: 'eNFA',
-      states: [{ id: 'q0', label: 'q0', isStart: true, isAccept: false }],
-      transitions: [],
-      startState: 'q0',
-      acceptStates: [],
-      alphabet: [],
-      stateRuleMap: {},
-    };
-  }
-
-  let stateCounter = 0;
-  const states = new Map<string, NFAState>();
-  const transitions: NFATransition[] = [];
-  const alphabetSet = new Set<string>();
-  const acceptStates: string[] = [];
-  const stateRuleMap: Record<string, { ruleId: string; priority: number }> = {};
-
-  const rootStartId = `q${stateCounter++}`;
-  states.set(rootStartId, {
-    id: rootStartId,
-    label: rootStartId,
-    subLabel: 'Start',
-    isStart: true,
-    isAccept: false,
-  });
-
-  for (const rule of enabledRules) {
-    const ast = parseRegexToAST(rule.regex, rule.id);
-    const nfa = buildThompsonNFA(ast, rule.id, rule.priority);
-
-    // Re-map IDs for this rule to avoid collisions
-    const localIdMap = new Map<string, string>();
-    for (const st of nfa.states) {
-      const newId = `q${stateCounter++}`;
-      localIdMap.set(st.id, newId);
-      const isAcc = st.isAccept;
-      if (isAcc) {
-        acceptStates.push(newId);
-        stateRuleMap[newId] = { ruleId: rule.id, priority: rule.priority };
-      }
-      states.set(newId, {
-        id: newId,
-        label: newId,
-        subLabel: isAcc ? `Accept (${rule.name})` : '',
-        isStart: false,
-        isAccept: isAcc,
-        ruleId: isAcc ? rule.id : undefined,
-        priority: isAcc ? rule.priority : undefined,
-      });
-    }
-
-    // Link root start state to rule's start state via ε-transition
-    const ruleStartNewId = localIdMap.get(nfa.startState)!;
-    transitions.push({
-      from: rootStartId,
-      to: ruleStartNewId,
-      symbol: EPSILON,
-      matcherDef: { type: 'epsilon' },
-      isEpsilon: true,
-    });
-
-    for (const t of nfa.transitions) {
-      transitions.push({
-        from: localIdMap.get(t.from)!,
-        to: localIdMap.get(t.to)!,
-        symbol: t.symbol,
-        matcherDef: t.matcherDef,
-        isEpsilon: t.isEpsilon,
-      });
-      if (!t.isEpsilon && t.symbol !== EPSILON) {
-        alphabetSet.add(t.symbol);
-      }
-    }
-  }
-
-  return {
-    type: 'eNFA',
-    states: Array.from(states.values()),
-    transitions,
-    startState: rootStartId,
-    acceptStates,
     alphabet: Array.from(alphabetSet).sort(),
     stateRuleMap,
   };

@@ -1,15 +1,3 @@
-/**
- * StateVerse - Engine Test Suite (Vitest)
- * Tests:
- * 1. Empty string
- * 2. Nested stars
- * 3. Classic (a|b)*abb
- * 4. Overlapping matches
- * 5. Invalid regex syntax errors with position
- * 6. Character classes, escapes, and quantifiers {m,n}
- * 7. Multi-rule priority resolution
- */
-
 import { describe, it, expect } from 'vitest';
 import {
   parseRegexToAST,
@@ -17,14 +5,11 @@ import {
   buildSubsetDFA,
   minimizeDFA,
   simulateAutomaton,
-  buildMultiRuleNFA,
-  DFAScanner,
   ParseError,
-  Rule,
-} from '../engine';
+} from './index';
 
 describe('StateVerse Automata Engine', () => {
-  describe('1. Empty String Regex', () => {
+  describe('Empty String Regex', () => {
     it('should parse empty string into epsilon AST and accept empty string', () => {
       const ast = parseRegexToAST('');
       expect(ast.type).toBe('LITERAL');
@@ -44,7 +29,7 @@ describe('StateVerse Automata Engine', () => {
     });
   });
 
-  describe('2. Nested Stars: (a*)* and (a|b*)*', () => {
+  describe('Nested Stars: (a*)* and (a|b*)*', () => {
     it('should compile and simulate nested star patterns without infinite loops', () => {
       const ast = parseRegexToAST('(a*)*');
       const nfa = buildThompsonNFA(ast);
@@ -74,7 +59,7 @@ describe('StateVerse Automata Engine', () => {
     });
   });
 
-  describe('3. Textbook Pattern: (a|b)*abb', () => {
+  describe('Textbook Pattern: (a|b)*abb', () => {
     const pattern = '(a|b)*abb';
     const ast = parseRegexToAST(pattern);
     const nfa = buildThompsonNFA(ast);
@@ -109,87 +94,7 @@ describe('StateVerse Automata Engine', () => {
     });
   });
 
-  describe('4. Scanner: Overlapping & Longest Matches', () => {
-    const rules: Rule[] = [
-      {
-        id: 'r_ab',
-        name: 'Pattern AB',
-        regex: 'ab',
-        category: 'CUSTOM',
-        severity: 'LOW',
-        description: 'Matches ab',
-        enabled: true,
-        priority: 10,
-      },
-      {
-        id: 'r_aba',
-        name: 'Pattern ABA',
-        regex: 'aba',
-        category: 'CUSTOM',
-        severity: 'HIGH',
-        description: 'Matches aba',
-        enabled: true,
-        priority: 20,
-      },
-      {
-        id: 'r_card',
-        name: 'Card Pattern',
-        regex: '\\d{4}-\\d{4}',
-        category: 'SENSITIVE_DATA',
-        severity: 'CRITICAL',
-        description: 'Card format',
-        enabled: true,
-        priority: 50,
-      },
-    ];
-
-    it('should find longest match with priority when overlapping is disabled', () => {
-      const multiNfa = buildMultiRuleNFA(rules);
-      const dfa = buildSubsetDFA(multiNfa);
-      const minDfa = minimizeDFA(dfa);
-      const scanner = new DFAScanner(minDfa, rules);
-
-      // In 'ababa', longest match at index 0 is 'aba'.
-      // With allowOverlapping = false, it skips to index 3 ('ba'), which doesn't match 'ab' or 'aba'.
-      const out = scanner.scan('ababa', { allowOverlapping: false });
-      expect(out.matches.length).toBe(1);
-      expect(out.matches[0].ruleId).toBe('r_aba');
-      expect(out.matches[0].text).toBe('aba');
-      expect(out.matches[0].start).toBe(0);
-      expect(out.matches[0].end).toBe(3);
-    });
-
-    it('should find all overlapping matches when allowOverlapping = true', () => {
-      const multiNfa = buildMultiRuleNFA(rules);
-      const dfa = buildSubsetDFA(multiNfa);
-      const minDfa = minimizeDFA(dfa);
-      const scanner = new DFAScanner(minDfa, rules);
-
-      // In 'ababa', start 0 matches 'aba', start 2 matches 'aba'
-      const out = scanner.scan('ababa', { allowOverlapping: true });
-      expect(out.matches.length).toBe(2);
-      expect(out.matches[0].start).toBe(0);
-      expect(out.matches[0].text).toBe('aba');
-      expect(out.matches[1].start).toBe(2);
-      expect(out.matches[1].text).toBe('aba');
-    });
-
-    it('should detect sensitive data cards across lines', () => {
-      const multiNfa = buildMultiRuleNFA(rules);
-      const dfa = buildSubsetDFA(multiNfa);
-      const minDfa = minimizeDFA(dfa);
-      const scanner = new DFAScanner(minDfa, rules);
-
-      const log = "User log\nTransaction card 1234-5678 processed\nSuccess";
-      const out = scanner.scan(log);
-      expect(out.matches.length).toBe(1);
-      expect(out.matches[0].ruleId).toBe('r_card');
-      expect(out.matches[0].text).toBe('1234-5678');
-      expect(out.matches[0].lineNumber).toBe(2);
-    });
-  });
-
-  describe('5. Invalid Regex Syntax Errors with Exact Position', () => {
+  describe('Invalid Regex Syntax Errors with Exact Position', () => {
     it('should report unclosed parenthesis with position', () => {
       expect(() => parseRegexToAST('(a|b')).toThrow(ParseError);
       try {
@@ -238,7 +143,7 @@ describe('StateVerse Automata Engine', () => {
     });
   });
 
-  describe('6. Character Classes, Escapes and Quantifiers {m,n}', () => {
+  describe('Character Classes, Escapes and Quantifiers {m,n}', () => {
     it('should match digits with \\d and bounded repeat {2,4}', () => {
       const ast = parseRegexToAST('\\d{2,4}');
       const nfa = buildThompsonNFA(ast);
@@ -277,7 +182,7 @@ describe('StateVerse Automata Engine', () => {
     });
   });
 
-  describe('7. Web Worker postMessage Structured Cloning (Serializable Automata)', () => {
+  describe('Web Worker postMessage Structured Cloning (Serializable Automata)', () => {
     it('should cleanly clone AST, ε-NFA, DFA, and Min-DFA for (a|b)*abb without functions', () => {
       const regex = '(a|b)*abb';
       const ast = parseRegexToAST(regex);

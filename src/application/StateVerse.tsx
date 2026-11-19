@@ -5,7 +5,7 @@ import { ASTView } from '../components/visualizer/ASTView';
 import { simulateAutomaton } from '../engine/simulator';
 import type { DFA } from '../engine/types';
 import { exportElementAsSVG } from '../utils/exportUtils';
-import { compilePattern } from './validation';
+import { compilePattern } from '../engine/compilePattern';
 import { GameRoom } from './GameRoom';
 import { ScoreRoom } from './ScoreRoom';
 import { buildChase, defaultChase, metro } from './gameModels';

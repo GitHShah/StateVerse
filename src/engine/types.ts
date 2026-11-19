@@ -135,30 +135,6 @@ export interface DFA {
   reductionPct?: number;
 }
 
-export type Severity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFO';
-
-export interface Rule {
-  id: string;
-  name: string;
-  regex: string;
-  category: 'THREAT' | 'SENSITIVE_DATA' | 'AUTH' | 'CUSTOM';
-  severity: Severity;
-  description: string;
-  enabled: boolean;
-  priority: number;
-}
-
-export interface MatchResult {
-  ruleId: string;
-  ruleName: string;
-  severity: Severity;
-  start: number;
-  end: number;
-  text: string;
-  lineNumber: number;
-  lineContent: string;
-}
-
 export interface SimulationStep {
   stepIndex: number;
   charIndex: number;

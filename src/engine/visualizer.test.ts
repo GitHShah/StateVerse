@@ -5,15 +5,11 @@ import {
   buildSubsetDFA,
   minimizeDFA,
   simulateAutomaton,
-} from '../engine';
-import { DEFAULT_RULES } from '../store/defaultRules';
+} from './index';
 
 describe('Visualizer Verification with structuredClone (Web Worker postMessage)', () => {
   it('1. Verifies SQL Injection rule in ε-NFA, DFA, and Min-DFA', () => {
-    const sqliRule = DEFAULT_RULES.find((r) => r.id === 'rule_sqli')!;
-    expect(sqliRule).toBeDefined();
-
-    const ast = parseRegexToAST(sqliRule.regex);
+    const ast = parseRegexToAST("(' OR 1=1)|(' or '1'='1)|(UNION SELECT)|(--)");
     const nfa = buildThompsonNFA(ast);
     const dfa = buildSubsetDFA(nfa);
     const minDfa = minimizeDFA(dfa);
@@ -42,10 +38,7 @@ describe('Visualizer Verification with structuredClone (Web Worker postMessage)'
   });
 
   it('2. Verifies IPv4 Address rule in ε-NFA, DFA, and Min-DFA', () => {
-    const ipv4Rule = DEFAULT_RULES.find((r) => r.id === 'rule_ipv4')!;
-    expect(ipv4Rule).toBeDefined();
-
-    const ast = parseRegexToAST(ipv4Rule.regex);
+    const ast = parseRegexToAST('\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}');
     const nfa = buildThompsonNFA(ast);
     const dfa = buildSubsetDFA(nfa);
     const minDfa = minimizeDFA(dfa);

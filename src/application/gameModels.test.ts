@@ -1,8 +1,7 @@
 import { expect,it } from 'vitest';
 import { buildChase, defaultChase, journey } from './gameModels';
 import { simulateAutomaton } from '../engine/simulator';
-import { compilePattern } from './validation';
-import { chasePattern } from './cricket';
+import { compilePattern } from '../engine/compilePattern';
 import { replayInnings } from './chaseReplay';
 
 it('compares played paths and leaves trailing deliveries unplayed', () => {
@@ -15,7 +14,7 @@ it('compares played paths and leaves trailing deliveries unplayed', () => {
 
 it('agrees on every playable chase through three balls', () => {
   const cricket = buildChase(defaultChase).dfa;
-  const machines = compilePattern(chasePattern);
+  const machines = compilePattern('44|[01]44|4[01]4');
   function visit(tape: string, runs: number) {
     for (const machine of [cricket,machines.nfa,machines.dfa,machines.minimal]) {
       expect(simulateAutomaton(machine,tape).isAccepted).toBe(runs >= 8);
