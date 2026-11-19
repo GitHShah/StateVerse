@@ -1,0 +1,86 @@
+.scholarship {
+  --panel: #111c2c;
+  --line: #293a50;
+  --muted: #a8bbca;
+  --mint: #80e4ce;
+  min-height: 100vh;
+  background: #0a1320;
+  color: #eaf1f7;
+}
+
+.lab-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem max(1.25rem, calc((100% - 1040px) / 2));
+  border-bottom: 1px solid var(--line);
+}
+
+.lab-brand, .lab-header nav, .lab-row {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  flex-wrap: wrap;
+}
+
+.lab-brand svg, .lab-intro svg { color: var(--mint); }
+.scholarship main { max-width: 1080px; margin: auto; padding: 2.5rem 1.25rem; }
+.lab-intro { margin-bottom: 1.5rem; }
+.lab-intro h1 { margin: .55rem 0 .3rem; font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 750; line-height: 1.15; }
+.scholarship h2 { font-size: 1.25rem; font-weight: 700; }
+.scholarship p { color: var(--muted); }
+.lab-panel { margin-bottom: 1rem; padding: clamp(1rem, 3vw, 1.6rem); border: 1px solid var(--line); border-radius: .9rem; background: var(--panel); }
+.lab-heading { justify-content: space-between; }
+.lab-field { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1rem; padding: .95rem 0; border-bottom: 1px solid var(--line); }
+.lab-field p, .lab-note, .lab-controls p { margin-top: .3rem; font-size: .875rem; }
+.scholarship label, .lab-controls strong { display: block; font-weight: 650; font-size: .9rem; }
+.scholarship input:not([type=checkbox]), .scholarship select {
+  width: 100%;
+  min-width: 0;
+  margin-top: .35rem;
+  padding: .62rem .75rem;
+  border: 1px solid #435771;
+  border-radius: .45rem;
+  background: #0b1522;
+  color: inherit;
+}
+.scholarship input { font-family: ui-monospace, monospace; }
+.scholarship input[aria-invalid=true] { border-color: #da8c88; }
+.scholarship button {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .52rem .78rem;
+  border: 1px solid #435771;
+  border-radius: .45rem;
+  font-size: .875rem;
+}
+.scholarship button:hover:not(:disabled) { border-color: var(--mint); }
+.scholarship button:disabled { opacity: .45; cursor: default; }
+.scholarship :focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+.scholarship .lab-primary { border-color: var(--mint); background: var(--mint); color: #0a2524; font-weight: 700; }
+.scholarship button[aria-current], .scholarship button[aria-pressed=true] { background: #1b3a40; border-color: #65ad9f; color: #b0f2e2; }
+.scholarship .lab-pass { color: #95ebc1; }
+.scholarship .lab-fail { color: #ffb5ab; }
+.lab-footer { margin-top: 1rem; }
+.lab-controls { display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: .9rem; }
+.lab-wide { grid-column: 1 / -1; }
+.lab-mono, .lab-table { font-family: ui-monospace, monospace; overflow-wrap: anywhere; }
+.lab-machine .lab-heading { margin: .9rem 0; }
+.scholarship .lab-checkbox { display: flex; gap: .4rem; align-items: center; font-weight: 400; }
+.lab-diagram { overflow: auto; max-height: 29rem; border: 1px solid var(--line); border-radius: .5rem; background: #101a28; }
+.lab-diagram svg { display: block; max-width: none; }
+.lab-trace { padding: .9rem 0; border-bottom: 1px solid var(--line); }
+.lab-trace p { margin-top: .6rem; overflow-wrap: anywhere; }
+.lab-machine summary { cursor: pointer; margin: .8rem 0; }
+.lab-table { max-height: 21rem; overflow: auto; margin-top: .4rem; }
+.lab-table table { width: 100%; text-align: left; font-size: .85rem; }
+.lab-table th, .lab-table td { padding: .4rem .65rem; border-bottom: 1px solid var(--line); }
+
+@media (max-width: 660px) {
+  .lab-controls, .lab-field { grid-template-columns: 1fr; }
+  .lab-field button { justify-self: start; }
+  .scholarship main { padding-top: 1.5rem; }
+}

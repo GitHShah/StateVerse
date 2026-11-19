@@ -1,0 +1,9 @@
+import {describe,it,expect} from 'vitest';
+import {IdentityEngine,MemoryClaims} from './engine';
+import {storyMissions,executeChoice} from './story';
+describe('Playable story missions',()=>{
+ it.each(storyMissions)('completes every real objective in $title',mission=>{const engine=new IdentityEngine(new MemoryClaims(),()=>1000);for(const objective of mission.objectives){const choice=objective.choices.find(c=>!c.wrong)!;const result=executeChoice(engine,choice);expect(result.passed,`${objective.title}: ${result.message}`).toBe(true);}if(mission.id===1)expect(engine.state).toBe('ACCESS');if(mission.id===2)expect(engine.state).toBe('LOCKED');if(mission.id===3)expect(engine.claims.all()).toHaveLength(1);});
+ it('does not advance on a rejected consent-bypass choice',()=>{const e=new IdentityEngine(new MemoryClaims(),()=>1000);const m=storyMissions[0];executeChoice(e,m.objectives[0].choices[0]);const result=executeChoice(e,m.objectives[1].choices[1]);expect(result.passed).toBe(false);expect(e.state).toBe('IDENTIFIED');expect(e.trace.at(-1)?.output).toBe('DENY');});
+ it('wrong credentials consume attempts instead of showing a scripted win',()=>{const e=new IdentityEngine(new MemoryClaims(),()=>1000);const m=storyMissions[0];for(const g of m.objectives.slice(0,3))executeChoice(e,g.choices[0]);for(let i=0;i<3;i++)expect(executeChoice(e,m.objectives[3].choices[1]).passed).toBe(false);expect(e.state).toBe('LOCKED');expect(executeChoice(e,m.objectives[3].choices[0]).passed).toBe(false);});
+ it('separates policy-fault analysis from actual runtime transitions',()=>{const e=new IdentityEngine();const m=storyMissions[3];expect(executeChoice(e,m.objectives[1].choices[0]).message).toContain('START —ACCESS/ALLOW→ ACCESS');expect(e.model.edges.find(t=>t.from==='START'&&t.symbol==='ACCESS')?.output).toBe('REQUIRE_VERIFICATION');});
+});

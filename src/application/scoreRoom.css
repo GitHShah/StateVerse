@@ -1,0 +1,39 @@
+.cr-room {--edge:#304356;--mint:#62e5bc;--paper:#121e2c;display:grid;gap:1rem;color:#f2f5f8}
+.cr-head,.cr-card {border:1px solid var(--edge);border-radius:16px;background:var(--paper);padding:clamp(1rem,2vw,1.45rem);min-width:0}
+.cr-head {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;background:linear-gradient(112deg,#183e35,#142333 62%);border-color:#39594d}
+.cr-title,.cr-head form,.cr-heading,.cr-card h2,.cr-replays button>span {display:flex;align-items:center;gap:.65rem}
+.cr-title>svg {color:var(--mint);width:38px;height:38px}
+.av .cr-title h1 {font-size:clamp(1.8rem,3vw,2.75rem);line-height:1.08}
+.av .cr-title p {margin:.3rem 0 0}
+.cr-head form {align-items:end;flex-wrap:wrap}.av .cr-head label {margin:0;font-size:.84rem}
+.av .cr-head input {display:block;width:6rem;padding:.43rem .6rem;margin-top:.2rem}
+.av .cr-head form button {background:#abe9c4;color:#10382e;border-color:#abe9c4;font-weight:700}
+.cr-grid {display:grid;grid-template-columns:minmax(320px,.87fr) minmax(0,1.38fr);gap:1rem}
+.cr-stack {display:grid;gap:1rem;min-width:0}.cr-heading {justify-content:space-between;flex-wrap:wrap}
+.av .cr-heading h3,.av .cr-heading label {margin:0}.cr-heading label {display:inline-flex;align-items:center;gap:.4rem}
+.cr-room input[type=checkbox]{accent-color:#66dcba}.cr-room button svg {display:inline;vertical-align:middle}.cr-room h2 svg {color:var(--mint)}
+.cr-stats,.cr-shots,.cr-replays,.cr-paths {display:grid;gap:.5rem}
+.cr-stats {grid-template-columns:repeat(3,1fr);margin:.9rem 0}
+.cr-stats>div,.cr-paths article,.cr-tape {background:#0c1521;border:1px solid #2b3d50;border-radius:9px;padding:.65rem}
+.cr-stats small,.cr-tape small {display:block;color:#a7b8c7;font-size:.78rem}
+.cr-stats strong {font:700 1.65rem ui-monospace,monospace}.cr-stats em {color:#a2b0bd;font:normal .9rem ui-monospace,monospace}
+.cr-room b.win,.cr-room b.loss,.cr-room b.live {display:inline-block;border-radius:5px;font:.74rem ui-monospace,monospace;padding:.25rem .45rem}
+.cr-room .win {color:#89f5c7;background:#164036}.cr-room .loss {color:#ffb5bd;background:#542832}.cr-room .live {color:#ffdb8e;background:#453924}
+.cr-ground {position:relative;background:radial-gradient(ellipse at center,#174238,#091b20);border:1px solid #294d43;border-radius:9px;margin-bottom:1rem}
+.cr-ground>span {position:absolute;left:.75rem;top:.55rem;color:#b2edc9;font-size:.77rem}.cr-field {width:100%;height:150px;display:block}
+.cr-shots {grid-template-columns:repeat(auto-fit,minmax(48px,1fr));margin-top:.65rem}
+.av .cr-shots button {padding:.5rem .12rem;background:#18283b;font-size:.76rem}
+.cr-shots strong {display:block;font-size:1.25rem;color:#b5caf8}.cr-shots button:nth-child(n+3) strong {color:#8ce0bc}
+.cr-tape code {display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;color:#99dbbf;margin:.3rem 0}
+.cr-tape span,.cr-states code {background:#232f40;border:1px solid #47566a;border-radius:4px;padding:.12rem .35rem}
+.cr-replays,.cr-paths {grid-template-columns:1fr 1fr;margin-top:.7rem}
+.av .cr-replays button {padding:.5rem;text-align:left}.cr-replays button>span {gap:.3rem}.cr-replays b {margin-left:auto}.cr-replays small {display:block;margin-top:.24rem}
+.cr-diagram {display:flex;flex-direction:column;gap:.5rem}.cr-map,.cr-diagram>small {margin-top:auto}
+.cr-key {display:flex;gap:.65rem;flex-wrap:wrap;font-size:.8rem;color:#ffcd73}.cr-key span:nth-child(2){color:#74e8bc}.cr-key span:last-child{color:#f7a1aa}
+.chase-map {background-color:#0b1421;background-image:radial-gradient(#233245 1px,transparent 1px);background-size:16px 16px;max-height:65vh;min-height:320px;overflow:auto;border:1px solid #2d4053;border-radius:9px;flex:1}
+.chase-map svg {display:block;font-family:ui-monospace,monospace}
+.cr-paths article {min-width:0}.cr-paths select {max-width:100%;font-size:.8rem}.cr-states {display:flex;gap:.35rem;align-items:center;flex-wrap:wrap;margin:.7rem 0}
+.cr-states .now code {border-color:#ffc65c;color:#ffe3a5}.cr-states .future {opacity:.6}
+.cr-comparator input[type=range]{max-width:9rem}
+@media(max-width:930px){.cr-grid{grid-template-columns:1fr}.cr-diagram{min-height:380px}.cr-head form{width:100%}}
+@media(max-width:620px){.cr-paths{grid-template-columns:1fr}.cr-grid{grid-template-columns:minmax(0,1fr)}.cr-replays button>span{flex-wrap:wrap}.cr-head form{gap:.5rem}.cr-stats>div{padding:.45rem}.cr-paths label{flex-wrap:wrap}}
