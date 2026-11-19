@@ -1,7 +1,6 @@
 /**
  * StateVerse - Hopcroft's DFA Minimization Algorithm
  * Minimizes DFAs to their unique canonical minimal representation.
- * Preserves multi-pattern rule bindings on accepting states.
  * Computes exact state reduction percentage.
  */
 
@@ -36,27 +35,9 @@ export function minimizeDFA(dfa: DFA): DFA {
   }
 
   const activeStates = states.filter((s) => reachable.has(s.id));
-  const nonAcceptGroup = activeStates.filter((s) => !s.isAccept).map((s) => s.id);
-
-  // Group accepting states by their matchedRuleId so different rules don't get conflated
-  const acceptBuckets = new Map<string, string[]>();
-  for (const s of activeStates) {
-    if (s.isAccept) {
-      const key = `${s.matchedRuleId || 'ACCEPT'}#${s.matchedRulePriority || 0}`;
-      if (!acceptBuckets.has(key)) {
-        acceptBuckets.set(key, []);
-      }
-      acceptBuckets.get(key)!.push(s.id);
-    }
-  }
-
-  let partitions: string[][] = [];
-  for (const group of acceptBuckets.values()) {
-    if (group.length > 0) partitions.push(group);
-  }
-  if (nonAcceptGroup.length > 0) {
-    partitions.push(nonAcceptGroup);
-  }
+  const accepting = activeStates.filter(state => state.isAccept).map(state => state.id);
+  const rejecting = activeStates.filter(state => !state.isAccept).map(state => state.id);
+  let partitions = [accepting, rejecting].filter(group => group.length > 0);
 
   // Hopcroft splitters use inverse transitions to partition predecessor sets.
   const inverse = new Map<string, Map<string, Set<string>>>();
@@ -131,17 +112,11 @@ export function minimizeDFA(dfa: DFA): DFA {
     return {
       id: minId,
       label: isTrap ? '∅' : minId,
-      subLabel: isTrap
-        ? 'Trap State'
-        : repState.matchedRuleId
-        ? `{${group.join(',')}} [${repState.matchedRuleId}]`
-        : `{${group.join(',')}}`,
+      subLabel: isTrap ? 'Trap State' : `{${group.join(',')}}`,
       mergedStates: group,
       isStart,
       isAccept,
       isTrap,
-      matchedRuleId: repState.matchedRuleId,
-      matchedRulePriority: repState.matchedRulePriority,
       matchedRules: repState.matchedRules,
     };
   });

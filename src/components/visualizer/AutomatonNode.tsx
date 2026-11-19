@@ -9,7 +9,6 @@ export interface AutomatonNodeData {
   isAccept: boolean;
   isTrap: boolean;
   isActive: boolean;
-  matchedRuleId?: string;
 }
 
 export const AutomatonNode: React.FC<{ data: AutomatonNodeData }> = ({ data }) => {

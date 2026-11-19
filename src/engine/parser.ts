@@ -133,11 +133,11 @@ function expandRepeat(child: ASTNode, min: number, max: number): ASTNode {
 /**
  * Parses a regular expression pattern into an AST.
  */
-export function parseRegexToAST(pattern: string, ruleId?: string): ASTNode {
-  return parseRegex(pattern, ruleId).ast;
+export function parseRegexToAST(pattern: string): ASTNode {
+  return parseRegex(pattern).ast;
 }
 
-export function parseRegex(pattern: string, ruleId?: string): { ast: ASTNode; postfix: string[] } {
+export function parseRegex(pattern: string): { ast: ASTNode; postfix: string[] } {
   if (typeof pattern !== 'string' || pattern.length > 256) throw new ParseError('Regex must be at most 256 characters.', 0);
   if (/[^\x00-\x7f·]/.test(pattern)) throw new ParseError('Use ASCII symbols or the concatenation operator ·.', 0);
   astNodeCounter = 1;
@@ -150,7 +150,6 @@ export function parseRegex(pattern: string, ruleId?: string): { ast: ASTNode; po
       type: 'LITERAL',
       value: '',
       label: 'ε',
-      ruleId,
     } };
   }
 
@@ -232,14 +231,12 @@ export function parseRegex(pattern: string, ruleId?: string): { ast: ASTNode; po
         type: 'LITERAL',
         value: tok.value,
         label: tok.value === '' ? 'ε' : `'${tok.value}'`,
-        ruleId,
       });
     } else if (tok.type === 'ANY_CHAR') {
       astStack.push({
         id: `ast_${astNodeCounter++}`,
         type: 'ANY_CHAR',
         label: 'Any (.)',
-        ruleId,
       });
     } else if (tok.type === 'CHAR_CLASS') {
       astStack.push({
@@ -248,7 +245,6 @@ export function parseRegex(pattern: string, ruleId?: string): { ast: ASTNode; po
         charList: tok.charSet ? Array.from(tok.charSet) : undefined,
         isNegated: tok.isNegated,
         label: tok.value,
-        ruleId,
       });
     } else if (tok.type === 'REPEAT') {
       const child = astStack.pop();
@@ -268,7 +264,6 @@ export function parseRegex(pattern: string, ruleId?: string): { ast: ASTNode; po
         operator: tok.value,
         label: `Quantifier (${tok.value})`,
         children: [child],
-        ruleId,
       });
     } else if (tok.type === 'CONCAT' || (tok.type === 'OP' && tok.value === '|')) {
       const isConcat = tok.type === 'CONCAT' || tok.value === '·';
@@ -283,7 +278,6 @@ export function parseRegex(pattern: string, ruleId?: string): { ast: ASTNode; po
         operator: isConcat ? '·' : '|',
         label: isConcat ? 'Concat (·)' : 'Union (|)',
         children: [left, right],
-        ruleId,
       });
     }
   }

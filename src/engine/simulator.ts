@@ -78,13 +78,8 @@ export function simulateAutomaton(automaton: NFA | DFA, inputString: string): Si
       });
     }
 
-    const matchedAcceptState = Array.from(currentActive).find((s) => acceptSet.has(s));
-    const isAccepted = matchedAcceptState !== undefined;
-    const acceptObj = states.find((s) => s.id === matchedAcceptState);
-
     return {
-      isAccepted,
-      matchedRuleId: acceptObj?.ruleId,
+      isAccepted: Array.from(currentActive).some(id => acceptSet.has(id)),
       steps,
       path,
     };
@@ -109,18 +104,6 @@ export function simulateAutomaton(automaton: NFA | DFA, inputString: string): Si
 
   for (let i = 0; i < inputString.length; i++) {
     const ch = inputString[i];
-    if (!currState) {
-      steps.push({
-        stepIndex: i + 1,
-        charIndex: i,
-        symbol: ch,
-        activeStates: [],
-        activeEdges: [],
-        description: `Consumed '${ch}': Already in reject / dead state`,
-      });
-      break;
-    }
-
     // Find valid transition from currState matching ch
     let targetState: string | null = null;
     let matchedEdgeId: string | null = null;
@@ -178,7 +161,6 @@ export function simulateAutomaton(automaton: NFA | DFA, inputString: string): Si
 
   return {
     isAccepted,
-    matchedRuleId: finalStateObj?.matchedRuleId,
     steps,
     path: path.filter((p): p is string => Boolean(p)),
   };

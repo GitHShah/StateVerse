@@ -4,7 +4,6 @@
  * Features:
  * - Atomic Alphabet Equivalence Partitioning (handles literals, \d, \w, \s, classes, .)
  * - 2,000 state safety limit with friendly error reporting
- * - Multi-rule priority resolution for accepting states
  */
 
 import { NFA, DFA, DFAState, DFATransition, EquivClass, EPSILON, matchesSymbol } from './types';
@@ -169,7 +168,7 @@ export function moveNFA(
  * Subset Construction: compiles ε-NFA into a DFA.
  */
 export function buildSubsetDFA(nfa: NFA): DFA {
-  const { transitions, startState, acceptStates, stateRuleMap = {} } = nfa;
+  const { transitions, startState, acceptStates } = nfa;
   const acceptSet = new Set(acceptStates);
 
   const equivClasses = partitionAlphabet(transitions);
@@ -212,39 +211,15 @@ export function buildSubsetDFA(nfa: NFA): DFA {
     const isTrap = sortedNfa.length === 0;
     const id = isTrap ? 'q_dead' : `D${dfaCounter++}`;
 
-    // Collect matched rules from accepting NFA states
-    const matchedRules: Array<{ ruleId: string; priority: number }> = [];
-    let isAccept = false;
-
-    for (const nfaId of sortedNfa) {
-      if (acceptSet.has(nfaId)) {
-        isAccept = true;
-        const ruleInfo = stateRuleMap[nfaId];
-        if (ruleInfo) {
-          matchedRules.push(ruleInfo);
-        }
-      }
-    }
-
-    // Sort matched rules by priority descending
-    matchedRules.sort((a, b) => b.priority - a.priority);
-    const winningRule = matchedRules[0];
-
     const dfaState: DFAState = {
       id,
       label: isTrap ? '∅' : id,
-      subLabel: isTrap
-        ? 'Trap State'
-        : winningRule
-        ? `{${sortedNfa.join(',')}} [${winningRule.ruleId}]`
-        : `{${sortedNfa.join(',')}}`,
+      subLabel: isTrap ? 'Trap State' : `{${sortedNfa.join(',')}}`,
       nfaStates: sortedNfa,
       isStart,
-      isAccept,
+      isAccept: sortedNfa.some(id => acceptSet.has(id)),
       isTrap,
-      matchedRuleId: winningRule?.ruleId,
-      matchedRulePriority: winningRule?.priority,
-      matchedRules,
+      matchedRules: [],
     };
 
     dfaStatesMap.set(key, dfaState);

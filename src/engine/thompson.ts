@@ -10,11 +10,9 @@ import { ASTNode, NFA, NFAState, NFATransition, EPSILON, SymbolMatcherDef } from
 interface NFAFragment {
   start: string;
   accept: string;
-  ruleId?: string;
-  priority?: number;
 }
 
-export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: number): NFA {
+export function buildThompsonNFA(ast: ASTNode): NFA {
   let stateCounter = 0;
   const states = new Map<string, NFAState>();
   const transitions: NFATransition[] = [];
@@ -63,7 +61,7 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
         const val = node.value;
         addTransition(start, accept, val, { type: 'char', char: val }, false);
       }
-      return { start, accept, ruleId: node.ruleId, priority };
+      return { start, accept };
     }
 
     // 2. Wildcard Any Character (.)
@@ -71,7 +69,7 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
       const start = createState();
       const accept = createState();
       addTransition(start, accept, '.', { type: 'any' }, false);
-      return { start, accept, ruleId: node.ruleId, priority };
+      return { start, accept };
     }
 
     // 3. Character Class [a-z] or [^abc]
@@ -81,7 +79,7 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
       const chars = node.charList ? [...node.charList] : [];
       const isNeg = !!node.isNegated;
       addTransition(start, accept, node.label, { type: 'class', chars, isNegated: isNeg }, false);
-      return { start, accept, ruleId: node.ruleId, priority };
+      return { start, accept };
     }
 
     // 4. Concatenation (·)
@@ -89,7 +87,7 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
       const left = compileNode(node.children[0]);
       const right = compileNode(node.children[1]);
       addTransition(left.accept, right.start, EPSILON, { type: 'epsilon' }, true);
-      return { start: left.start, accept: right.accept, ruleId: node.ruleId, priority };
+      return { start: left.start, accept: right.accept };
     }
 
     // 5. Alternation / Union (|)
@@ -104,7 +102,7 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
       addTransition(left.accept, accept, EPSILON, { type: 'epsilon' }, true);
       addTransition(right.accept, accept, EPSILON, { type: 'epsilon' }, true);
 
-      return { start, accept, ruleId: node.ruleId, priority };
+      return { start, accept };
     }
 
     // 6. Kleene Star (*)
@@ -118,7 +116,7 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
       addTransition(inner.accept, inner.start, EPSILON, { type: 'epsilon' }, true);
       addTransition(inner.accept, accept, EPSILON, { type: 'epsilon' }, true);
 
-      return { start, accept, ruleId: node.ruleId, priority };
+      return { start, accept };
     }
 
     // 7. Plus (+)
@@ -131,7 +129,7 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
       addTransition(inner.accept, inner.start, EPSILON, { type: 'epsilon' }, true);
       addTransition(inner.accept, accept, EPSILON, { type: 'epsilon' }, true);
 
-      return { start, accept, ruleId: node.ruleId, priority };
+      return { start, accept };
     }
 
     // 8. Optional (?)
@@ -144,7 +142,7 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
       addTransition(start, accept, EPSILON, { type: 'epsilon' }, true);
       addTransition(inner.accept, accept, EPSILON, { type: 'epsilon' }, true);
 
-      return { start, accept, ruleId: node.ruleId, priority };
+      return { start, accept };
     }
 
     throw new Error(`Unsupported AST node type: ${node.type}`);
@@ -156,8 +154,7 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
 
   startStateObj.isStart = true;
   acceptStateObj.isAccept = true;
-  acceptStateObj.ruleId = ruleId;
-  acceptStateObj.priority = priority ?? 0;
+  acceptStateObj.priority = 0;
 
   // Renumber states in BFS topological order starting from startState
   const bfsOrder: string[] = [];
@@ -191,10 +188,9 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
     return {
       id: newId,
       label: newId,
-      subLabel: st.isStart ? 'Start' : st.isAccept ? (st.ruleId ? `Accept (${st.ruleId})` : 'Accept') : '',
+      subLabel: st.isStart ? 'Start' : st.isAccept ? 'Accept' : '',
       isStart: st.isStart,
       isAccept: st.isAccept,
-      ruleId: st.ruleId,
       priority: st.priority,
     };
   });
@@ -207,13 +203,6 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
     isEpsilon: t.isEpsilon,
   }));
 
-  const stateRuleMap: Record<string, { ruleId: string; priority: number }> = {};
-  for (const st of normalizedStates) {
-    if (st.isAccept && st.ruleId) {
-      stateRuleMap[st.id] = { ruleId: st.ruleId, priority: st.priority ?? 0 };
-    }
-  }
-
   return {
     type: 'eNFA',
     states: normalizedStates,
@@ -221,6 +210,6 @@ export function buildThompsonNFA(ast: ASTNode, ruleId?: string, priority?: numbe
     startState: idMap.get(rootFrag.start)!,
     acceptStates: [idMap.get(rootFrag.accept)!],
     alphabet: Array.from(alphabetSet).sort(),
-    stateRuleMap,
+    stateRuleMap: {},
   };
 }

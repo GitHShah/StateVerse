@@ -128,7 +128,6 @@ export const AutomatonGraph: React.FC<AutomatonGraphProps> = ({
           isAccept: st.isAccept,
           isTrap: st.isTrap,
           isActive,
-          matchedRuleId: st.matchedRuleId,
         },
       };
     });

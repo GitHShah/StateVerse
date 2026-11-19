@@ -27,7 +27,6 @@ export interface ASTNode {
   operator?: string;
   label: string;
   children?: ASTNode[];
-  ruleId?: string;
 }
 
 export type SymbolMatcherDef =
@@ -89,8 +88,6 @@ export interface NFAState {
   isStart: boolean;
   isAccept: boolean;
   isTrap?: boolean;
-  matchedRuleId?: string;
-  ruleId?: string;
   priority?: number;
 }
 
@@ -119,8 +116,6 @@ export interface DFAState {
   isStart: boolean;
   isAccept: boolean;
   isTrap: boolean;
-  matchedRuleId?: string;
-  matchedRulePriority?: number;
   matchedRules?: Array<{ ruleId: string; priority: number }>;
 }
 
@@ -146,7 +141,6 @@ export interface SimulationStep {
 
 export interface SimulationResult {
   isAccepted: boolean;
-  matchedRuleId?: string;
   steps: SimulationStep[];
   path: string[];
 }
