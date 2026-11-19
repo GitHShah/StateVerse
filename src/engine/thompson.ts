@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Thompson's Construction Algorithm
+ * StateVerse - Thompson's Construction Algorithm
  * Compiles an AST (or multiple rule ASTs) into an ε-NFA.
  * Supports: literals, character classes [a-z], [^abc], wildcard '.', escapes, and multi-pattern union.
  * All transitions use serializable SymbolMatcherDef plain data objects.

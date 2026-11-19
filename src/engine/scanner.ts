@@ -1,5 +1,5 @@
 /**
- * PatternGuard - DFA Log & Input Scanner
+ * StateVerse - DFA Log & Input Scanner
  * Single-pass O(n) regex log scanner with zero backtracking (guaranteed ReDoS immunity).
  * Uses multi-pattern DFA with longest-match and rule priority resolution.
  */

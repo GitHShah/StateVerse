@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Regex Doctor Test Suite (Vitest)
+ * StateVerse - Regex Doctor Test Suite (Vitest)
  * Tests ambiguity detection, Tarjan SCCs, witness generation, safe rewrites, and benchmark verification.
  */
 

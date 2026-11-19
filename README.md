@@ -1,4 +1,4 @@
-# AutomataViz
+# StateVerse
 
 A browser-based Theory of Computation project built with React, TypeScript and React Flow. Use the three-line menu to switch windows.
 

@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Shunting-Yard Parser & AST Builder
+ * StateVerse - Shunting-Yard Parser & AST Builder
  * Converts token streams into an Abstract Syntax Tree (AST).
  * Handles operator precedence: Quantifiers (*, +, ?, {m,n}) > Concat (·) > Alternation (|).
  */

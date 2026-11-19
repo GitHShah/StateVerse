@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Tarjan's Strongly Connected Components (SCC) Algorithm
+ * StateVerse - Tarjan's Strongly Connected Components (SCC) Algorithm
  * Analyzes the product graph NFA x NFA to partition states into SCCs
  * and identify exponential (EDA) or polynomial (IDA) ambiguity.
  */

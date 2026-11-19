@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Subset Construction Algorithm (ε-NFA → DFA)
+ * StateVerse - Subset Construction Algorithm (ε-NFA → DFA)
  * Converts non-deterministic ε-NFAs into deterministic DFAs.
  * Features:
  * - Atomic Alphabet Equivalence Partitioning (handles literals, \d, \w, \s, classes, .)

@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Lexer & Tokenizer
+ * StateVerse - Lexer & Tokenizer
  * Converts raw regex strings into a verified token stream with explicit concatenation operators.
  * Supports: |, *, +, ?, ( ), ., [a-z], [^abc], \d, \w, \s, escapes, and {m,n}.
  */

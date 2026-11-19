@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Hopcroft's DFA Minimization Algorithm
+ * StateVerse - Hopcroft's DFA Minimization Algorithm
  * Minimizes DFAs to their unique canonical minimal representation.
  * Preserves multi-pattern rule bindings on accepting states.
  * Computes exact state reduction percentage.

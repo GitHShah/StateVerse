@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Regex Doctor Engine Entry Point
+ * StateVerse - Regex Doctor Engine Entry Point
  */
 
 export * from './types';

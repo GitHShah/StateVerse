@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Adversarial Witness Generator
+ * StateVerse - Adversarial Witness Generator
  * Synthesizes the minimal attack payload (prefix + pump^k + suffix)
  * using BFS on the product automaton.
  */

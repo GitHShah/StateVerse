@@ -1,5 +1,5 @@
 /**
- * PatternGuard Automata Engine - Core Types
+ * StateVerse Automata Engine - Core Types
  * Pure TypeScript, no UI dependencies. Fully serializable for Web Worker structured cloning.
  */
 

@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Engine Test Suite (Vitest)
+ * StateVerse - Engine Test Suite (Vitest)
  * Tests:
  * 1. Empty string
  * 2. Nested stars
@@ -23,7 +23,7 @@ import {
   Rule,
 } from '../engine';
 
-describe('PatternGuard Automata Engine', () => {
+describe('StateVerse Automata Engine', () => {
   describe('1. Empty String Regex', () => {
     it('should parse empty string into epsilon AST and accept empty string', () => {
       const ast = parseRegexToAST('');

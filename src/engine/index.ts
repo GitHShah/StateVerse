@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Engine Entry Point
+ * StateVerse - Engine Entry Point
  */
 
 export * from './types';

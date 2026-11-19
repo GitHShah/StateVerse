@@ -47,7 +47,7 @@ function pythonModule(dfa: DFA) {
     '        if state is None:', '            break','    return {"accepted": state in ACCEPT}',''].join('\n');
 }
 
-export default function AutomataViz() {
+export default function StateVerse() {
   const [room,setRoom] = useState<Room>('compiler');
   const [settings,setSettings] = useState(defaultChase);
   const chase = useMemo(() => buildChase(settings), [settings]);
@@ -109,7 +109,7 @@ export default function AutomataViz() {
 
   return <div className="av"><header className="av-head">
     <button ref={menuRef} aria-label="Open navigation" aria-expanded={drawer} onClick={() => setDrawer(!drawer)}><Menu/></button>
-    <GitFork className="brand-icon"/><div className="brand"><strong>AutomataViz</strong><small>Interactive Theory of Computation Compiler, Visualizer &amp; Code Generator</small></div>
+    <GitFork className="brand-icon"/><div className="brand"><strong>StateVerse</strong><small>Interactive Theory of Computation Compiler, Visualizer &amp; Code Generator</small></div>
     <code className="pipeline-badge">REGEX → ε-NFA → DFA → HOPCROFT</code>
     <div className="row utilities"><select aria-label="Load preset regex" value="" onChange={e=>choosePattern(e.target.value)}>
       <option value="" disabled>Load preset regex…</option>{presets.map(p=><option key={p}>{p}</option>)}</select>

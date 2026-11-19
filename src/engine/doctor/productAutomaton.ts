@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Product Automaton Builder (NFA x NFA)
+ * StateVerse - Product Automaton Builder (NFA x NFA)
  * Constructs the synchronized product automaton between two copies of the Thompson NFA.
  * Accurately detects multi-path epsilon derivations (EDA) and off-diagonal cycles (IDA).
  */

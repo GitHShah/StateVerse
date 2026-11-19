@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Ambiguity Detector & Regex Doctor Engine
+ * StateVerse - Ambiguity Detector & Regex Doctor Engine
  * Full diagnostic pipeline: Regex -> AST -> Thompson NFA -> Product NFAxNFA -> Tarjan SCC -> Diagnosis
  */
 

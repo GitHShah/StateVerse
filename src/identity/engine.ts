@@ -38,7 +38,7 @@ export class MemoryClaims implements ClaimStore {
   add(c: Claim) { if(this.claims.some(x=>x.identity===c.identity && x.service===c.service)) return false; this.claims.push({...c}); return true; }
 }
 export class BrowserClaims implements ClaimStore {
-  private key = 'idshield.claims.v1';
+  private key = 'StateVerse.claims.v1';
   all(): Claim[] {
     const raw = localStorage.getItem(this.key);
     if (!raw) return [];

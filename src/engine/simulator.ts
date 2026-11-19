@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Step-by-Step Automaton Simulator
+ * StateVerse - Step-by-Step Automaton Simulator
  * Simulates ε-NFA, DFA, or Min-DFA on an input tape string.
  * Returns step trace, active states, active transitions, and full state path.
  */

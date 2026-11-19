@@ -1,5 +1,5 @@
 /**
- * PatternGuard - Regex Doctor Types
+ * StateVerse - Regex Doctor Types
  * Pure TypeScript definitions for ambiguity detection, product automata,
  * witness generation, and safe rewrites.
  */
